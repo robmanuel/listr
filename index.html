@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Listr?</title>
+
+    <!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+<style>
+#input {width:100%; height: auto; }
+#output {width:100%; height: auto; }
+</style>
+
+</head>
+<body>
+<div class="container">
+<div class="row">
+<div class="col-*-*">
+<h1>Listr</h1>
+<h2>Paste in your list here:</h2>
+<p><textarea id="input" rows=5>
+Sausages
+Cakes
+Monkeys
+Eggs</textarea></p>
+<h2>Click the ones you like here:</h2>
+<p><form class="cbx"><div id="list"></div></p>
+<h2>Output:</h2>
+<p><textarea id="output" readonly cols=80 rows=5></textarea></p>
+
+</div></div></div>  
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+<script>
+
+var entityMap = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+  '/': '&#x2F;',
+  '`': '&#x60;',
+  '=': '&#x3D;'
+};
+
+function escapeHtml (string) {
+  return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+    return entityMap[s];
+  });
+}
+
+
+var counter=0
+$(document).ready(function(){
+    function myFunc() {
+        var input = $("#input").val();
+        if (input.length>0)
+        	{
+        	counter=0
+        	var newtext=""
+			//$("#list").text(input);
+			$.each($('#input').val().split('\n'), function(e){
+			counter++
+		    newtext=newtext+"<label><input class=\"cbx2\" type=\"checkbox\" id='counter"+counter+"' value='"+escapeHtml(this)+"'/>&nbsp;"+counter+": "+this+"</label><br />"
+			});
+			$("#list").html(newtext)
+			}
+    }       
+    myFunc();
+
+    // EDIT BELOW -- this will update while typing
+    $("#input").keyup(myFunc);
+
+$(".cbx").change(function () { 
+//alert ($("#counter1").attr('value'))
+var i=0;
+var numbercounter=0;
+var outtext=""
+while (i++ <=counter)
+	{
+	//alert ($("#counter"+i).attr('value'))
+	// alert ($("#counter"+i).prop('checked'))
+	if ($("#counter"+i).prop('checked'))
+		{numbercounter++;outtext=outtext+numbercounter+". "+$("#counter"+i).attr('value')+"\r"}
+	$("#output").text(outtext)
+	}
+
+});
+
+
+});
+</script>
+
+  </body>
+</html>
